@@ -1,0 +1,612 @@
+<!DOCTYPE html><html><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;"><meta http-equiv="x-dns-prefetch-control" content="off"><script src="https://puc.poecdn.net/authenticated_preview_page/standard.3ef2c256959faf5a756d.js"></script>
+    <meta charset="utf-8">
+    <title>Poe</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script src="https://puc.poecdn.net/authenticated_preview_page/disableWebRTC.9710cebe07429a9e8e06.js"></script><meta name="x-poe-allow-downloads" content="true"><meta name="x-poe-datastore-behavior" content="disabled"><script src="https://puc.poecdn.net/authenticated_preview_page/tw.b9024aecac666455e183.js"></script><script src="https://puc.poecdn.net/authenticated_preview_page/deps.faccd16000d314dc16d5.js"></script><script src="https://puc.poecdn.net/authenticated_preview_page/exports.b0f0f482cdeb5302b0b9.js"></script><script src="https://puc.poecdn.net/authenticated_preview_page/renderer.75c73ae6b4235f62945a.js"></script><script>Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _react = require('react'); var _react2 = _interopRequireDefault(_react);
+var _lucidereact = require('lucide-react');
+
+const ExamPaper = () => {
+  const [activeSection, setActiveSection] = _react.useState.call(void 0, 'A'); // 'A' or 'B'
+  const [studentInfo, setStudentInfo] = _react.useState.call(void 0, { name: '', class: '', number: '' });
+  const [answers, setAnswers] = _react.useState.call(void 0, {});
+  const [viewMode, setViewMode] = _react.useState.call(void 0, 'exam'); // 'exam' or 'print'
+
+  // --- Data Structure for Questions ---
+
+  const sectionAQuestions = [
+    {
+      id: '1-i',
+      type: 'text',
+      question: '1. 試解釋以下文句中的粗體字。(i) 處江湖之遠，則憂其君。《岳陽樓記》 江湖：',
+      marks: 2
+    },
+    {
+      id: '1-ii',
+      type: 'text',
+      question: '1. (ii) 鳳簫聲動，玉壺光轉。《青玉案‧元夕》 動：',
+      marks: 2
+    },
+    {
+      id: '2',
+      type: 'mc',
+      question: '2. 「乃」是常見的文言虛詞，以下哪一句中的「乃」字，與「今其智乃反不能及，其可怪也歟」一句中，「乃」字的用法最接近？',
+      options: [
+        'A. 乃重修岳陽樓，增其舊制。',
+        'B. 秦王恐其破璧，乃辭謝固請。',
+        'C. 謂獄中語乃親得之於史公云。',
+        'D. 問今是何世？乃不知有漢，無論魏晉。'
+      ],
+      marks: 2
+    },
+    {
+      id: '3',
+      type: 'mc',
+      question: '3. 以下哪些句子是文言倒裝句？',
+      options: [
+        'A. 眾裏尋他千百度。',
+        'B. 商旅不行，檣傾楫摧。',
+        'C. 故國神遊，多情應笑我。',
+        'D. 乍暖還寒時候，最難將息。'
+      ],
+      marks: 2
+    },
+    {
+      id: '4',
+      type: 'text',
+      question: '4. 在《念奴嬌‧赤壁懷古》一詞中，作者運用誇張手法描寫赤鼻磯的壯麗景色。試摘錄有關詞句。',
+      marks: 2,
+      placeholder: '請輸入詞句...'
+    },
+    {
+      id: '5',
+      type: 'long_text',
+      question: '5. 范仲淹在《岳陽樓記》一文，寫古仁人「不以物喜，不以己悲」，但又指古仁人「先天下之憂而憂，後天下之樂而樂」。兩者有沒有矛盾？',
+      marks: 4
+    },
+    {
+      id: '6',
+      type: 'mc',
+      question: '6. 以下哪項是《青玉案‧元夕》的體制特點？',
+      options: [
+        'A. 詞牌：元夕；詞題：青玉案；類別：慢詞',
+        'B. 詞牌：元夕；詞題：青玉案；類別：中調',
+        'C. 詞牌：青玉案；詞題：元夕；類別：中調',
+        'D. 詞牌：青玉案；詞題：元夕；類別：慢詞'
+      ],
+      marks: 2
+    },
+    {
+      id: '7',
+      type: 'long_text',
+      question: '7. 辛棄疾如何運用多感官描寫刻畫元夕夜熱鬧的場景？試根據以下引文內容，加以說明。\n「寶馬雕車香滿路。鳳簫聲動，玉壺光轉，一夜魚龍舞。」',
+      marks: 4
+    },
+    {
+      id: '8',
+      type: 'long_text',
+      question: '8. 有論者認為《師說》在文末交待寫作動機，增強了文章的說服力。試綜合《師說》的內容，加以說明。',
+      marks: 4
+    }
+  ];
+
+  const sectionBQuestions = [
+    {
+      id: '9-i',
+      type: 'mc',
+      question: '9. (i) 作者描述一位媽媽牽着兩個小小孩的片段，這位媽媽教導了孩子甚麼？\n(1) 個人禮儀 (2) 幫助別人 (3) 注意安全 (4) 愛惜事物',
+      options: [
+        'A. (1)、(3)',
+        'B. (1)、(4)',
+        'C. (2)、(4)',
+        'D. (1)、(3)、(4)'
+      ],
+      marks: 2
+    },
+    {
+      id: '9-ii',
+      type: 'long_text',
+      question: '9. (ii) 「這樣的畫面我們不曾有過」一句有甚麼作用？試加以說明。',
+      marks: 4
+    },
+    {
+      id: '10',
+      type: 'long_text',
+      question: '10. 第 5 段作者提到「我們並非總是遺忘，我們只是選擇記憶」，「選擇記憶」指甚麼？試根據第 3 及第 4 段的內容，加以說明。',
+      marks: 4
+    },
+    {
+      id: '11',
+      type: 'table',
+      question: '11. 作者藉不同片段突顯孩子的形象，通過這些形象隱含了對「我」的批評。試根據有關片段把答案填寫在下表之內。每道分題的答案不得多於四個字。',
+      marks: 6,
+      rows: [
+        { label: '片段一：你來向我告狀...你突然淚灑機場...', subQ: '(i) 孩子的形象', key: '11-i' },
+        { label: '片段一：(續)', subQ: '(iii) 對「我」的批評', key: '11-iii' },
+        { label: '片段二：是的，衝突的問題是我這個無能的母親無法解決的...哥哥一臉不以為意的表情...', subQ: '(ii) 孩子的形象', key: '11-ii' }
+      ]
+    },
+    {
+      id: '12',
+      type: 'mc_grid',
+      question: '12. 以下引文運用了甚麼手法？試分別指出。',
+      marks: 6,
+      subQuestions: [
+        { id: '12-i', text: '(i) 咦，真有這樣的事？會不會是虛構或重構的記憶？這家百貨公司就在我公司附近……' },
+        { id: '12-ii', text: '(ii) 如今長成大人的你才說起，會不會那是一道說不出的傷痕，直到今天才浮現？我想你的傷痕不只這個。' },
+        { id: '12-iii', text: '(iii) 在你沒出生前，哥哥是世界中心，所有的人事物都繞着他轉……' }
+      ],
+      options: ['A 反問', 'B 暗喻', 'C 設問', 'D 借代', 'E 以上皆非']
+    },
+    {
+      id: '13',
+      type: 'mc',
+      question: '13. 第一篇共有 16 個段落，按結構可劃分為四個部分。以下哪一項的劃分最為合適？',
+      options: [
+        'A. 第 1-2 段 / 第 3-5 段 / 第 6-13 段 / 第 14-16 段',
+        'B. 第 1-2 段 / 第 3-5 段 / 第 6-12 段 / 第 13-16 段',
+        'C. 第 1-5 段 / 第 6-8 段 / 第 9-12 段 / 第 13-16 段',
+        'D. 第 1-5 段 / 第 6-8 段 / 第 9-13 段 / 第 14-16 段'
+      ],
+      marks: 2
+    },
+    {
+      id: '14',
+      type: 'long_text',
+      question: '14. 在第 10 段，作者寫小兒子在搬家時「留下這個傷痕」。試綜合全文，分析小兒子留下的「傷痕」指甚麼。',
+      marks: 4
+    },
+    {
+      id: '15',
+      type: 'mc_grid',
+      question: '15. 試根據第 11 和第 12 段，試判斷以下陳述。',
+      marks: 4,
+      subQuestions: [
+        { id: '15-i', text: '(i) 作者不希望被一家之主發現兄弟不睦。' },
+        { id: '15-ii', text: '(ii) 作者認為遺忘是解決兄弟紛爭的最佳方法。' }
+      ],
+      options: ['A 正確', 'B 錯誤', 'C 無從判斷']
+    },
+    {
+      id: '16',
+      type: 'mc',
+      question: '16. 根據第 13 段，作者為甚麼對男性友人的故事感到遺憾？',
+      options: [
+        'A. 父母總會有所偏愛',
+        'B. 兄弟相爭無法避免',
+        'C. 誤會導致家庭破裂',
+        'D. 妒忌容易造成隔閡'
+      ],
+      marks: 2
+    },
+    {
+      id: '17',
+      type: 'mc',
+      question: '17. 在第 15 段，作者記述兄弟二人在除夕夜玩手遊有甚麼用意？',
+      options: [
+        'A. 說明兄弟情誼不變，作者過分憂慮',
+        'B. 指出兄弟達成和解，解開作者心結',
+        'C. 對比男性友人的故事，抒發兄弟和睦的重要',
+        'D. 呼應上文，指出自己難以理解兄弟情誼'
+      ],
+      marks: 2
+    },
+    {
+      id: '18',
+      type: 'long_text',
+      question: '18. 綜合全文，作者對「和解之路」的理解有何改變？試就「那張掉落的海報」的象徵意義加以說明。',
+      marks: 4
+    },
+    {
+      id: '19',
+      type: 'mc',
+      question: '19. 試指出「而閣下必欲使之察一道之吏，而寄之以刑獄之事，非所謂因其材力之所宜也」一句中，「寄」和「因」兩字的字義。',
+      options: [
+        'A. 「寄」解作「委託」；「因」解作「依照」。',
+        'B. 「寄」解作「委託」；「因」解作「由於」。',
+        'C. 「寄」解作「傳達」；「因」解作「依照」。',
+        'D. 「寄」解作「傳達」；「因」解作「由於」。'
+      ],
+      marks: 2
+    },
+    {
+      id: '20',
+      type: 'mc',
+      question: '20. 下列哪一句中的「而」字，和「勞有至於病而不敢辭者」一句中的「而」字語意相同？',
+      options: [
+        'A. 某聞古之君子立而相天下。',
+        'B. 形勢之所安而役使之。',
+        'C. 今也某材不足以任劇，而又多病。',
+        'D. 而閣下必欲使之察一道之吏。'
+      ],
+      marks: 2
+    },
+    {
+      id: '21',
+      type: 'mc',
+      question: '21. 下列句子中，哪些粗體字是代詞？\n(1) 某聞古之君子立而相天下。\n(2) 比年加之風眩，勢不可以去左右。\n(3) 閣下必欲使之奔走跋涉。\n(4) 論者或以為事君使之左則左。',
+      options: [
+        'A. (1)、(3)',
+        'B. (1)、(4)',
+        'C. (2)、(3)',
+        'D. (3)、(4)'
+      ],
+      marks: 2
+    },
+    {
+      id: '22',
+      type: 'long_text',
+      question: '22. 作者認為「人臣之義」指甚麼？試以作者的經歷為例加以說明。',
+      marks: 4
+    },
+    {
+      id: '23',
+      type: 'mc',
+      question: '23. 有人認為臣子侍奉國君應「使之左則左，使之右則右」，作者有甚麼看法？',
+      options: [
+        'A. 這是不合情理的做法。',
+        'B. 這是本末倒置的表現。',
+        'C. 必須建基於國君了解臣子性情。',
+        'D. 必須建基於國君適當役使臣子。'
+      ],
+      marks: 2
+    },
+    {
+      id: '24',
+      type: 'long_text',
+      question: '24. 荀子在引文指出臣子的從命與逆命。荀子和王安石的看法有何相通之處？試就兩文對「從命與逆命」的考量說明。',
+      marks: 4
+    }
+  ];
+
+  // --- Handlers ---
+
+  const handleInputChange = (id, value) => {
+    setAnswers(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleStudentInfoChange = (field, value) => {
+    setStudentInfo(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handlePrint = () => {
+    setViewMode('print');
+    setTimeout(() => {
+      window.print();
+    }, 500);
+  };
+
+  // --- Render Components ---
+
+  const renderQuestion = (q) => {
+    const commonClasses = "mb-8 p-6 bg-white rounded-lg shadow-sm border border-gray-200 break-inside-avoid";
+    const labelClasses = "block text-lg font-medium text-gray-900 mb-3 whitespace-pre-wrap";
+
+    switch (q.type) {
+      case 'text':
+      case 'long_text':
+        return (
+          _react2.default.createElement('div', { key: q.id, className: commonClasses,}
+            , _react2.default.createElement('label', { className: labelClasses,}, q.question, " " , _react2.default.createElement('span', { className: "text-sm font-normal text-gray-500"  ,}, "(", q.marks, "分)"))
+            , _react2.default.createElement('textarea', {
+              className: `w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none ${q.type === 'long_text' ? 'h-32' : 'h-16'}`,
+              placeholder: "請在此作答...",
+              value: answers[q.id] || '',
+              onChange: (e) => handleInputChange(q.id, e.target.value),}
+            )
+          )
+        );
+      case 'mc':
+        return (
+          _react2.default.createElement('div', { key: q.id, className: commonClasses,}
+            , _react2.default.createElement('p', { className: labelClasses,}, q.question, " " , _react2.default.createElement('span', { className: "text-sm font-normal text-gray-500"  ,}, "(", q.marks, "分)"))
+            , _react2.default.createElement('div', { className: "space-y-2",}
+              , q.options.map((option, idx) => (
+                _react2.default.createElement('label', { key: idx, className: `flex items-center p-3 rounded border cursor-pointer hover:bg-gray-50 ${answers[q.id] === option.charAt(0) ? 'bg-blue-50 border-blue-500 ring-1 ring-blue-500' : 'border-gray-200'}`,}
+                  , _react2.default.createElement('input', {
+                    type: "radio",
+                    name: q.id,
+                    value: option.charAt(0),
+                    checked: answers[q.id] === option.charAt(0),
+                    onChange: () => handleInputChange(q.id, option.charAt(0)),
+                    className: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"    ,}
+                  )
+                  , _react2.default.createElement('span', { className: "ml-3 text-gray-700" ,}, option)
+                )
+              ))
+            )
+          )
+        );
+      case 'table':
+        return (
+          _react2.default.createElement('div', { key: q.id, className: commonClasses,}
+            , _react2.default.createElement('p', { className: labelClasses,}, q.question, " " , _react2.default.createElement('span', { className: "text-sm font-normal text-gray-500"  ,}, "(", q.marks, "分)"))
+            , _react2.default.createElement('div', { className: "overflow-x-auto",}
+              , _react2.default.createElement('table', { className: "min-w-full divide-y divide-gray-200 border"   ,}
+                , _react2.default.createElement('thead', { className: "bg-gray-50",}
+                  , _react2.default.createElement('tr', null
+                    , _react2.default.createElement('th', { className: "px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/2"        ,}, "片段")
+                    , _react2.default.createElement('th', { className: "px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/2"        ,}, "答案 (每題不多於四字)" )
+                  )
+                )
+                , _react2.default.createElement('tbody', { className: "bg-white divide-y divide-gray-200"  ,}
+                  , q.rows.map((row, idx) => (
+                    _react2.default.createElement('tr', { key: idx,}
+                      , _react2.default.createElement('td', { className: "px-4 py-2 text-sm text-gray-700"   ,}
+                        , _react2.default.createElement('div', { className: "font-bold mb-1" ,}, row.label)
+                        , _react2.default.createElement('div', { className: "text-blue-600",}, row.subQ)
+                      )
+                      , _react2.default.createElement('td', { className: "px-4 py-2" ,}
+                        , _react2.default.createElement('input', {
+                          type: "text",
+                          maxLength: 4,
+                          className: "w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"      ,
+                          value: answers[row.key] || '',
+                          onChange: (e) => handleInputChange(row.key, e.target.value),
+                          placeholder: "限四字",}
+                        )
+                      )
+                    )
+                  ))
+                )
+              )
+            )
+          )
+        );
+      case 'mc_grid':
+        return (
+          _react2.default.createElement('div', { key: q.id, className: commonClasses,}
+            , _react2.default.createElement('p', { className: labelClasses,}, q.question, " " , _react2.default.createElement('span', { className: "text-sm font-normal text-gray-500"  ,}, "(", q.marks, "分)"))
+            , _react2.default.createElement('div', { className: "overflow-x-auto",}
+              , _react2.default.createElement('table', { className: "min-w-full divide-y divide-gray-200 border"   ,}
+                , _react2.default.createElement('thead', { className: "bg-gray-50",}
+                  , _react2.default.createElement('tr', null
+                    , _react2.default.createElement('th', { className: "px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/2"        ,}, "題目")
+                    , q.options.map((opt, i) => (
+                      _react2.default.createElement('th', { key: i, className: "px-2 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"       ,}, opt.split(' ')[0])
+                    ))
+                  )
+                )
+                , _react2.default.createElement('tbody', { className: "bg-white divide-y divide-gray-200"  ,}
+                  , q.subQuestions.map((subQ, idx) => (
+                    _react2.default.createElement('tr', { key: idx,}
+                      , _react2.default.createElement('td', { className: "px-4 py-2 text-sm text-gray-700"   ,}, subQ.text)
+                      , q.options.map((opt, i) => {
+                        const optVal = opt.split(' ')[0]; // A, B, C...
+                        return (
+                          _react2.default.createElement('td', { key: i, className: "px-2 py-2 text-center"  ,}
+                            , _react2.default.createElement('input', {
+                              type: "radio",
+                              name: subQ.id,
+                              checked: answers[subQ.id] === optVal,
+                              onChange: () => handleInputChange(subQ.id, optVal),
+                              className: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"    ,}
+                            )
+                          )
+                        );
+                      })
+                    )
+                  ))
+                )
+              )
+            )
+            , _react2.default.createElement('div', { className: "mt-2 text-sm text-gray-500"  ,}, "選項說明: "
+               , q.options.join(' / ')
+            )
+          )
+        );
+      default:
+        return null;
+    }
+  };
+
+  // --- Print View ---
+  if (viewMode === 'print') {
+    return (
+      _react2.default.createElement('div', { className: "p-8 bg-white text-black font-serif max-w-[210mm] mx-auto"     ,}
+        , _react2.default.createElement('div', { className: "text-center mb-6 border-b-2 border-black pb-4"    ,}
+          , _react2.default.createElement('h1', { className: "text-2xl font-bold mb-2"  ,}, "香港耀能協會高福耀紀念學校")
+          , _react2.default.createElement('h2', { className: "text-xl font-bold mb-2"  ,}, "2024-2025 上學期考試 - 中六中國語文 試卷一"    )
+          , _react2.default.createElement('div', { className: "flex justify-between mt-4 text-lg"   ,}
+            , _react2.default.createElement('span', null, "姓名：", studentInfo.name || '___________')
+            , _react2.default.createElement('span', null, "班別：", studentInfo.class || '___________')
+            , _react2.default.createElement('span', null, "學號：", studentInfo.number || '___________')
+          )
+        )
+
+        , _react2.default.createElement('div', { className: "mb-6",}
+          , _react2.default.createElement('h3', { className: "text-lg font-bold border-b border-gray-400 mb-4"    ,}, "甲部：指定閱讀篇章 (30%)" )
+          , _react2.default.createElement('div', { className: "grid grid-cols-1 gap-4"  ,}
+            , sectionAQuestions.map(q => (
+              _react2.default.createElement('div', { key: q.id, className: "mb-2 break-inside-avoid" ,}
+                , _react2.default.createElement('div', { className: "font-bold",}, q.question.split('\n')[0].substring(0, 50), "...")
+                , _react2.default.createElement('div', { className: "mt-1 p-2 border border-gray-300 min-h-[40px] bg-gray-50 whitespace-pre-wrap"      ,}
+                  , q.type === 'table' 
+                    ? '見表格作答' 
+                    : q.type === 'mc_grid'
+                      ? '見表格作答'
+                      : (answers[q.id] || '(未作答)')
+                )
+                , q.type === 'table' && (
+                   _react2.default.createElement('div', { className: "mt-2 text-sm" ,}
+                     , q.rows.map(r => (
+                       _react2.default.createElement('div', { key: r.key, className: "flex gap-2" ,}
+                         , _react2.default.createElement('span', null, r.subQ, ":")
+                         , _react2.default.createElement('span', { className: "font-mono border-b border-black px-2"   ,}, answers[r.key] || '____')
+                       )
+                     ))
+                   )
+                )
+                 , q.type === 'mc_grid' && (
+                   _react2.default.createElement('div', { className: "mt-2 text-sm" ,}
+                     , q.subQuestions.map(sub => (
+                       _react2.default.createElement('div', { key: sub.id, className: "flex gap-2" ,}
+                         , _react2.default.createElement('span', null, sub.id, ":")
+                         , _react2.default.createElement('span', { className: "font-mono border-b border-black px-2"   ,}, answers[sub.id] || '____')
+                       )
+                     ))
+                   )
+                )
+              )
+            ))
+          )
+        )
+
+        , _react2.default.createElement('div', { className: "mb-6",}
+          , _react2.default.createElement('h3', { className: "text-lg font-bold border-b border-gray-400 mb-4"    ,}, "乙部：閱讀能力考材 (70%)" )
+          , _react2.default.createElement('div', { className: "grid grid-cols-1 gap-4"  ,}
+            , sectionBQuestions.map(q => (
+              _react2.default.createElement('div', { key: q.id, className: "mb-2 break-inside-avoid" ,}
+                , _react2.default.createElement('div', { className: "font-bold",}, q.question.split('\n')[0].substring(0, 50), "...")
+                 , _react2.default.createElement('div', { className: "mt-1 p-2 border border-gray-300 min-h-[40px] bg-gray-50 whitespace-pre-wrap"      ,}
+                  , q.type === 'table' 
+                    ? '見表格作答' 
+                    : q.type === 'mc_grid'
+                      ? '見表格作答'
+                      : (answers[q.id] || '(未作答)')
+                )
+                 , q.type === 'table' && (
+                   _react2.default.createElement('div', { className: "mt-2 text-sm" ,}
+                     , q.rows.map(r => (
+                       _react2.default.createElement('div', { key: r.key, className: "flex gap-2" ,}
+                         , _react2.default.createElement('span', null, r.subQ, ":")
+                         , _react2.default.createElement('span', { className: "font-mono border-b border-black px-2"   ,}, answers[r.key] || '____')
+                       )
+                     ))
+                   )
+                )
+                , q.type === 'mc_grid' && (
+                   _react2.default.createElement('div', { className: "mt-2 text-sm" ,}
+                     , q.subQuestions.map(sub => (
+                       _react2.default.createElement('div', { key: sub.id, className: "flex gap-2" ,}
+                         , _react2.default.createElement('span', null, sub.id, ":")
+                         , _react2.default.createElement('span', { className: "font-mono border-b border-black px-2"   ,}, answers[sub.id] || '____')
+                       )
+                     ))
+                   )
+                )
+              )
+            ))
+          )
+        )
+
+        , _react2.default.createElement('div', { className: "fixed top-4 right-4 print:hidden"   ,}
+          , _react2.default.createElement('button', { 
+            onClick: () => setViewMode('exam'),
+            className: "bg-gray-800 text-white px-4 py-2 rounded shadow hover:bg-gray-700"      ,}
+, "返回作答模式"
+
+          )
+        )
+      )
+    );
+  }
+
+  // --- Main Exam View ---
+  return (
+    _react2.default.createElement('div', { className: "min-h-screen bg-gray-100 font-sans text-gray-800 pb-20"    ,}
+      /* Header */
+      , _react2.default.createElement('header', { className: "bg-white shadow-md sticky top-0 z-10"    ,}
+        , _react2.default.createElement('div', { className: "max-w-5xl mx-auto px-4 py-4"   ,}
+          , _react2.default.createElement('div', { className: "flex justify-between items-center mb-4"   ,}
+            , _react2.default.createElement('div', { className: "flex items-center gap-2"  ,}
+              , _react2.default.createElement(_lucidereact.BookOpen, { className: "w-6 h-6 text-blue-600"  ,} )
+              , _react2.default.createElement('h1', { className: "text-xl font-bold text-gray-900 hidden sm:block"    ,}, "2024-2025 上學期考試 - 中六中國語文 試卷一"    )
+              , _react2.default.createElement('h1', { className: "text-xl font-bold text-gray-900 sm:hidden"   ,}, "中六中文卷一")
+            )
+            , _react2.default.createElement('div', { className: "flex gap-2" ,}
+              , _react2.default.createElement('button', { 
+                onClick: handlePrint,
+                className: "flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors text-sm font-medium"           ,}
+
+                , _react2.default.createElement(_lucidereact.Printer, { className: "w-4 h-4" ,} )
+                , _react2.default.createElement('span', { className: "hidden sm:inline" ,}, "預覽/列印 PDF" )
+              )
+            )
+          )
+
+          /* Student Info Bar */
+          , _react2.default.createElement('div', { className: "grid grid-cols-3 gap-4 bg-gray-50 p-3 rounded-lg border border-gray-200 text-sm"        ,}
+            , _react2.default.createElement('input', { 
+              type: "text", 
+              placeholder: "考生姓名", 
+              className: "bg-transparent border-b border-gray-300 focus:border-blue-500 outline-none px-2"     ,
+              value: studentInfo.name,
+              onChange: (e) => handleStudentInfoChange('name', e.target.value),}
+            )
+            , _react2.default.createElement('input', { 
+              type: "text", 
+              placeholder: "班別", 
+              className: "bg-transparent border-b border-gray-300 focus:border-blue-500 outline-none px-2"     ,
+              value: studentInfo.class,
+              onChange: (e) => handleStudentInfoChange('class', e.target.value),}
+            )
+             , _react2.default.createElement('input', { 
+              type: "text", 
+              placeholder: "考生編號", 
+              className: "bg-transparent border-b border-gray-300 focus:border-blue-500 outline-none px-2"     ,
+              value: studentInfo.number,
+              onChange: (e) => handleStudentInfoChange('number', e.target.value),}
+            )
+          )
+
+          /* Navigation Tabs */
+          , _react2.default.createElement('div', { className: "flex mt-4 border-b border-gray-200"   ,}
+            , _react2.default.createElement('button', {
+              onClick: () => setActiveSection('A'),
+              className: `flex-1 py-3 text-center font-medium text-sm transition-colors relative ${activeSection === 'A' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}`,}
+, "甲部：指定閱讀篇章 (30%)"
+
+              , activeSection === 'A' && _react2.default.createElement('div', { className: "absolute bottom-0 left-0 w-full h-0.5 bg-blue-600"     ,})
+            )
+            , _react2.default.createElement('button', {
+              onClick: () => setActiveSection('B'),
+              className: `flex-1 py-3 text-center font-medium text-sm transition-colors relative ${activeSection === 'B' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}`,}
+, "乙部：閱讀能力考材 (70%)"
+
+              , activeSection === 'B' && _react2.default.createElement('div', { className: "absolute bottom-0 left-0 w-full h-0.5 bg-blue-600"     ,})
+            )
+          )
+        )
+      )
+
+      /* Content Area */
+      , _react2.default.createElement('main', { className: "max-w-4xl mx-auto px-4 py-8"   ,}
+        , activeSection === 'A' ? (
+          _react2.default.createElement('div', { className: "space-y-6 animate-in fade-in duration-300"   ,}
+            , _react2.default.createElement('div', { className: "bg-blue-50 border-l-4 border-blue-500 p-4 mb-6"    ,}
+              , _react2.default.createElement('h2', { className: "text-blue-800 font-bold" ,}, "甲部作答須知")
+              , _react2.default.createElement('p', { className: "text-blue-600 text-sm mt-1"  ,}, "本部分根據「指定閱讀篇章」設問，佔全卷 30%。請回答第 1 至 8 題。"     )
+            )
+            , sectionAQuestions.map(q => renderQuestion(q))
+          )
+        ) : (
+          _react2.default.createElement('div', { className: "space-y-6 animate-in fade-in duration-300"   ,}
+             , _react2.default.createElement('div', { className: "bg-blue-50 border-l-4 border-blue-500 p-4 mb-6"    ,}
+              , _react2.default.createElement('h2', { className: "text-blue-800 font-bold" ,}, "乙部作答須知")
+              , _react2.default.createElement('p', { className: "text-blue-600 text-sm mt-1"  ,}, "本部分根據另行派發的「閱讀能力考材」設問，佔全卷 70%。請回答第 9 至 24 題。"     )
+            )
+            , sectionBQuestions.map(q => renderQuestion(q))
+          )
+        )
+      )
+
+      /* Footer Status */
+      , _react2.default.createElement('div', { className: "fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 text-center text-sm text-gray-500 shadow-lg"           ,}
+        , _react2.default.createElement('div', { className: "max-w-4xl mx-auto flex justify-between items-center"    ,}
+          , _react2.default.createElement('span', null, "考生須知：全部問題均須作答。")
+          , _react2.default.createElement('div', { className: "flex items-center gap-2"  ,}
+            , _react2.default.createElement(_lucidereact.CheckCircle, { className: "w-4 h-4 text-green-500"  ,} )
+            , _react2.default.createElement('span', null, "作答進度自動保存中")
+          )
+        )
+      )
+    )
+  );
+};
+
+exports. default = ExamPaper;
+</script></head>
+  <body>
+  
+
+<div id="preview-app"></div></body></html>
